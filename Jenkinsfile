@@ -12,7 +12,7 @@ pipeline {
             ''' 
       }
     }
-    
+ /*   
     stage ('Check-Git-Secrets') {
       steps {
         sh 'rm trufflehog || true'
@@ -40,7 +40,7 @@ pipeline {
         }
       }
     }
-    
+*/    
     stage ('Build') {
       steps {
       sh 'mvn clean package'
@@ -50,19 +50,20 @@ pipeline {
     stage ('Deploy-To-Tomcat') {
             steps {
            sshagent(['tomcat']) {
-                sh 'scp -o StrictHostKeyChecking=no target/*.war ubuntu@13.232.202.25:/prod/apache-tomcat-8.5.39/webapps/webapp.war'
+                sh 'scp -o StrictHostKeyChecking=no target/*.war ubuntu@3.135.218.18:/prod/apache-tomcat-8.5.51/webapps/webapp.war'
               }      
            }       
     }
     
-    
+/*    
     stage ('DAST') {
       steps {
         sshagent(['zap']) {
-         sh 'ssh -o  StrictHostKeyChecking=no ubuntu@13.232.158.44 "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://13.232.202.25:8080/webapp/" || true'
+         sh 'ssh -o  StrictHostKeyChecking=no ubuntu@3.136.20.42 "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://13.232.202.25:8080/webapp/" || true'
         }
       }
     }
     
   }
 }
+*/
