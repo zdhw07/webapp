@@ -46,20 +46,24 @@ pipeline {
       sh 'mvn clean package'
        }
     }
+   
+//  UPDATE APACHE SERVER IP AFTER RESTARTING EC2 INSTANCE
     
     stage ('Deploy-To-Tomcat') {
             steps {
            sshagent(['tomcat']) {
-                sh 'scp -o StrictHostKeyChecking=no target/*.war ubuntu@3.135.218.18:/prod/apache-tomcat-8.5.51/webapps/webapp.war'
+                sh 'scp -o StrictHostKeyChecking=no target/*.war ubuntu@3.15.0.121:/prod/apache-tomcat-8.5.51/webapps/webapp.war'
               }      
            }       
     }
     
-   
+  
+//  UPDATE ZAP AND APACHE SERVER IP AFTER RESTARTING EC2 INSTANCE
+    
     stage ('DAST') {
       steps {
         sshagent(['zap']) {
-         sh 'ssh -o  StrictHostKeyChecking=no ubuntu@18.221.47.222 "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://3.135.218.18:8080/webapp/" || true'
+         sh 'ssh -o  StrictHostKeyChecking=no ubuntu@13.59.13.123 "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://3.15.0.121:8080/webapp/" || true'
         }
       }
     }
